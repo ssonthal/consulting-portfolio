@@ -1,19 +1,15 @@
 import { Hero } from "@/components/marketing/hero";
+import { ServicesOverview } from "@/components/marketing/services-overview";
 import { WhatsAppDemo } from "@/components/marketing/whatsapp-demo";
-import { AgentGrid } from "@/components/marketing/agent-grid";
-import {
-  CtaBanner,
-  FeatureSections,
-} from "@/components/marketing/feature-sections";
+import { Cta } from "@/components/marketing/cta";
 
 export default function HomePage() {
   return (
     <>
       <Hero />
+      <ServicesOverview />
       <WhatsAppDemo />
-      <AgentGrid />
-      <FeatureSections />
-      <CtaBanner />
+      <Cta />
     </>
   );
 }

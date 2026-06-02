@@ -8,8 +8,7 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/cn";
 
 const nav = [
-  { href: "/#agents", label: "Agents" },
-  { href: "/services", label: "Solutions" },
+  { href: "/services", label: "Services" },
   { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
 ];
@@ -24,28 +23,28 @@ export function Header() {
       className={cn(
         "sticky top-0 z-50 border-b transition-colors",
         onHome
-          ? "border-white/10 bg-surface-dark/80 backdrop-blur-xl"
-          : "border-slate-200 bg-white/90 backdrop-blur-md",
+          ? "border-white/10 bg-surface-dark/90 backdrop-blur-md"
+          : "border-slate-200 bg-white/95 backdrop-blur-md",
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+      <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-6">
         <Link
           href="/"
           className={cn(
-            "text-lg font-bold tracking-tight",
+            "text-sm font-semibold",
             onHome ? "text-white" : "text-slate-900",
           )}
         >
-          {site.brand}
+          {site.name}
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-6 md:flex">
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "text-sm font-medium transition-colors",
+                "text-sm",
                 onHome
                   ? "text-slate-300 hover:text-white"
                   : "text-slate-600 hover:text-slate-900",
@@ -54,25 +53,16 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-        </nav>
-
-        <div className="hidden items-center gap-3 md:flex">
           <Link
             href="/contact"
             className={cn(
               "text-sm font-medium",
-              onHome ? "text-slate-300 hover:text-white" : "text-slate-600",
+              onHome ? "text-white" : "text-brand-600",
             )}
           >
             Contact
           </Link>
-          <Link
-            href="/contact"
-            className="rounded-full bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:bg-brand-500"
-          >
-            Book a demo
-          </Link>
-        </div>
+        </nav>
 
         <button
           type="button"
@@ -80,17 +70,25 @@ export function Header() {
           onClick={() => setOpen(!open)}
           aria-label="Menu"
         >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-surface-dark px-6 py-4 md:hidden">
+        <div
+          className={cn(
+            "border-t px-6 py-3 md:hidden",
+            onHome ? "border-white/10 bg-surface-dark" : "border-slate-200 bg-white",
+          )}
+        >
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="block py-2 text-slate-300"
+              className={cn(
+                "block py-2 text-sm",
+                onHome ? "text-slate-300" : "text-slate-700",
+              )}
               onClick={() => setOpen(false)}
             >
               {item.label}
@@ -98,10 +96,10 @@ export function Header() {
           ))}
           <Link
             href="/contact"
-            className="mt-3 block rounded-full bg-brand-600 py-2.5 text-center text-sm font-semibold text-white"
+            className="block py-2 text-sm font-medium text-brand-600"
             onClick={() => setOpen(false)}
           >
-            Book a demo
+            Contact
           </Link>
         </div>
       )}

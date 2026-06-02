@@ -5,10 +5,9 @@ export type ChatMessage = {
 };
 
 export const QUICK_REPLIES = [
-  "What do you build?",
-  "Pricing & timeline",
-  "WhatsApp integration",
-  "Book a demo",
+  "What do you do?",
+  "How it works",
+  "Get in touch",
 ] as const;
 
 type Intent = {
@@ -20,51 +19,45 @@ const INTENTS: Intent[] = [
   {
     patterns: [/hello|hi|hey|namaste|start/i],
     reply:
-      "Hi! I'm the FlowDesk assistant. I can explain our AI agents for inbound sales—FAQ bots, lead qualification, and follow-ups. What would you like to know?",
+      "Hi—I'm Shubham's site assistant. I can explain FAQ chatbots, lead qualification, and how to get in touch.",
   },
   {
     patterns: [/what do you (build|do)|services|offer|help/i],
     reply:
-      "We build conversational AI: FAQ agents on your website or WhatsApp, lead qualification (budget, timeline, fit), and automated follow-ups. Typical first project is live in 2–3 weeks.",
+      "Shubham builds FAQ chatbots (RAG over your documents), lead qualification in chat, and handoffs to Sheets, CRM, or email. First projects are usually 2–3 weeks.",
+  },
+  {
+    patterns: [/how (it|this) works|rag|document|knowledge/i],
+    reply:
+      "For FAQ bots, you provide documents (pricing, services, policies). The bot answers from that content—not generic guesses. Full RAG on your docs is what we're building next; this widget is a simple preview.",
   },
   {
     patterns: [/price|pricing|cost|how much|budget/i],
     reply:
-      "Pilot projects usually start with a focused FAQ + lead-capture agent. Pricing depends on channels (web vs WhatsApp), integrations (CRM/Sheets), and volume. Book a demo and we'll scope a fixed quote after a 15-min call.",
+      "Pricing depends on channels (web vs WhatsApp) and integrations. Email Shubham with your use case for a scoped quote after a short call.",
   },
   {
     patterns: [/timeline|how long|weeks|launch/i],
     reply:
-      "A first FAQ + lead capture agent is often live in 2–3 weeks: week 1 discovery + knowledge base, week 2 build + test, week 3 pilot on your site or WhatsApp.",
+      "A focused FAQ + lead capture project is often 2–3 weeks: scope and documents, build and test, then go live on your site or WhatsApp.",
   },
   {
-    patterns: [/whatsapp|instagram|channel|omnichannel/i],
+    patterns: [/whatsapp|channel/i],
     reply:
-      "Yes—we deploy on your website widget, WhatsApp Business API, and can hand off to your team with full chat context. English, Hindi, and Hinglish are supported.",
+      "Yes—FAQ and qualification can run on a website widget or WhatsApp Business API, with handoff to your team when needed.",
   },
   {
-    patterns: [/crm|zoho|hubspot|sheet|integrat/i],
+    patterns: [/crm|sheet|integrat|slack/i],
     reply:
-      "Qualified leads can sync to Google Sheets, Zoho, HubSpot, or Slack/email alerts—whatever your team already uses. No forced CRM migration.",
+      "Qualified leads can go to Google Sheets, a CRM, Slack, or email—whatever your team already uses.",
   },
   {
-    patterns: [/human|handoff|escalat|talk to (a )?person/i],
-    reply:
-      "Complex queries escalate to your team with the full conversation attached—so reps don't re-ask budget and timeline questions.",
-  },
-  {
-    patterns: [/inbound|sme|who is this for|fit/i],
-    reply:
-      "We work with any business that gets enquiries online—service companies, B2B, e-commerce, agencies—especially when leads stall between first message and follow-up.",
-  },
-  {
-    patterns: [/demo|call|meet|contact|book/i],
+    patterns: [/contact|email|book|call|demo|meet/i],
     reply: "__LEAD_CAPTURE__",
   },
   {
     patterns: [/thank|thanks|bye|goodbye/i],
-    reply:
-      "You're welcome! If you'd like a custom walkthrough, tap \"Book a demo\" or leave your details and Shubham will reach out within 1–2 business days.",
+    reply: "You're welcome. Use Get in touch or the contact page if you want Shubham to follow up.",
   },
 ];
 
@@ -79,7 +72,7 @@ export function matchIntent(text: string): string {
 }
 
 export const FALLBACK_REPLY =
-  "I'm not sure about that yet. Try asking about pricing, WhatsApp setup, timelines, or tap **Book a demo** to speak with Shubham directly.";
+  "I'm not sure about that. Try What do you do?, How it works, or Get in touch.";
 
 export const WELCOME_MESSAGE =
-  "Hi there 👋 I'm FlowDesk's AI assistant. Ask me about WhatsApp chatbots, lead qualification, or how we help turn more enquiries into customers.";
+  "Hi—ask about FAQ chatbots, how RAG works, or how to contact Shubham.";

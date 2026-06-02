@@ -5,50 +5,41 @@ import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Book a demo or discovery call for sales AI agents.",
+  description: "Get in touch about FAQ chatbots and sales automation.",
 };
 
 export default function ContactPage() {
   return (
     <>
       <PageHero
-        title="Book a demo"
-        description="Tell us how enquiries reach you today and where leads drop off—we will reply within 1–2 business days."
+        title="Contact"
+        description="Email works best. I usually reply within 1–2 business days."
       />
-      <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8 md:py-24">
-        <div className="grid gap-6">
+      <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8">
+        <div className="space-y-4">
           <a
-            href={`mailto:${site.email}?subject=AI%20sales%20agent%20demo`}
-            className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition hover:shadow-card-hover"
+            href={`mailto:${site.email}?subject=Sales%20automation%20enquiry`}
+            className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-5 transition hover:border-slate-300"
           >
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-50">
-              <Mail className="h-7 w-7 text-brand-600" />
-            </div>
+            <Mail className="h-6 w-6 shrink-0 text-brand-600" />
             <div>
-              <p className="font-semibold text-slate-900">Email</p>
+              <p className="font-medium text-slate-900">Email</p>
               <p className="text-brand-600">{site.email}</p>
             </div>
           </a>
-          {site.calendlyUrl ? (
+          {site.calendlyUrl && (
             <a
               href={site.calendlyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-card transition hover:shadow-card-hover"
+              className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-5 transition hover:border-slate-300"
             >
-              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-50">
-                <Calendar className="h-7 w-7 text-brand-600" />
-              </div>
+              <Calendar className="h-6 w-6 shrink-0 text-brand-600" />
               <div>
-                <p className="font-semibold text-slate-900">Schedule a call</p>
-                <p className="text-slate-600">15 minutes · Calendly</p>
+                <p className="font-medium text-slate-900">Schedule a call</p>
+                <p className="text-sm text-slate-600">Calendly</p>
               </div>
             </a>
-          ) : (
-            <p className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 text-sm text-slate-600">
-              Add <code className="rounded bg-slate-200 px-1">NEXT_PUBLIC_CALENDLY_URL</code> to
-              enable scheduling.
-            </p>
           )}
         </div>
       </div>

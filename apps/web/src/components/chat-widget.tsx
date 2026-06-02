@@ -70,7 +70,7 @@ export function ChatWidget() {
         body: JSON.stringify(payload),
       });
       appendAssistant(
-        `Thanks, ${lead.name}! We've received your details. Shubham will reach out at ${lead.email} within 1–2 business days.`,
+        `Thanks, ${lead.name}. Shubham will reach out at ${lead.email} within 1–2 business days.`,
       );
     } catch {
       appendAssistant(
@@ -83,9 +83,7 @@ export function ChatWidget() {
 
   const startLeadCapture = () => {
     setLeadStep("name");
-    appendAssistant(
-      "Great—let's get you a demo. What's your name?",
-    );
+    appendAssistant("What's your name?");
   };
 
   const processMessage = async (text: string) => {
@@ -162,7 +160,7 @@ export function ChatWidget() {
   };
 
   const handleQuickReply = (text: string) => {
-    if (text === "Book a demo") {
+    if (text === "Get in touch") {
       if (leadStep === "idle") {
         appendUser(text);
         startLeadCapture();
@@ -196,11 +194,11 @@ export function ChatWidget() {
         >
           <header className="mesh-dark flex items-center gap-3 border-b border-white/10 px-4 py-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-sm font-bold text-white">
-              FD
+              SS
             </div>
             <div>
-              <p className="font-semibold text-white">FlowDesk Assistant</p>
-              <p className="text-xs text-emerald-400">Online · replies instantly</p>
+              <p className="font-semibold text-white">Site assistant</p>
+              <p className="text-xs text-slate-400">Preview · not full RAG yet</p>
             </div>
           </header>
 
