@@ -2,20 +2,13 @@
   "name": "consulting-portfolio",
   "private": true,
   "scripts": {
-    "dev": "pnpm --parallel -r dev",
-    "dev:web": "pnpm --filter @consulting/web dev",
-    "dev:docflow": "pnpm --filter @consulting/docflow dev",
-    "build": "pnpm -r build",
-    "lint": "pnpm -r lint",
-    "db:generate": "pnpm --filter @consulting/docflow db:generate",
-    "db:migrate": "pnpm --filter @consulting/docflow db:migrate",
-    "db:push": "pnpm --filter @consulting/docflow db:push"
+    "dev": "pnpm --filter @consulting/web dev",
+    "build": "pnpm --filter @consulting/web build",
+    "lint": "pnpm --filter @consulting/web lint",
+    "start": "pnpm --filter @consulting/web start"
   },
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@9.15.0",
-  "devDependencies": {
-    "esbuild": "^0.25.12"
-  }
+  "packageManager": "pnpm@9.15.0"
 }
