@@ -1,0 +1,14 @@
+{
+  "invoice_number": "INV-2024-0842",
+  "invoice_date": "2024-11-15",
+  "vendor_name": "Acme Supplies Pvt Ltd",
+  "vendor_gstin": "27AABCU9603R1ZM",
+  "buyer_gstin": "29ABCDE1234F1Z5",
+  "taxable_value": 45000,
+  "cgst": 4050,
+  "sgst": 4050,
+  "igst": null,
+  "total_amount": 53100,
+  "hsn_summary": "8471, 8504",
+  "confidence": "high"
+}

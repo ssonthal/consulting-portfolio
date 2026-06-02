@@ -1,0 +1,126 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: DocFlow AWS backend — RDS PostgreSQL + scheduled sync Lambda
+
+Parameters:
+  DbMasterPassword:
+    Type: String
+    NoEcho: true
+    MinLength: 12
+    Description: Master password for RDS PostgreSQL (docflow user)
+  EncryptionKey:
+    Type: String
+    NoEcho: true
+    Description: AES key for encrypting Google refresh tokens (min 16 chars)
+  OpenAIApiKey:
+    Type: String
+    NoEcho: true
+    Description: OpenAI API key for PDF extraction
+  GoogleClientId:
+    Type: String
+    Description: Google OAuth client ID (for reference; web app uses this)
+  GoogleClientSecret:
+    Type: String
+    NoEcho: true
+    Description: Google OAuth client secret (for reference; web app uses this)
+  OpenAIModel:
+    Type: String
+    Default: gpt-4o
+  DocflowMonthlyDocLimit:
+    Type: String
+    Default: "20"
+  # Set to true only for local migrations from your IP — disable in production
+  AllowPublicDbAccess:
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+
+Conditions:
+  IsPublicDb: !Equals [!Ref AllowPublicDbAccess, "true"]
+
+Globals:
+  Function:
+    Timeout: 300
+    MemorySize: 1024
+    Runtime: nodejs20.x
+    Architectures:
+      - arm64
+
+Resources:
+  DocFlowDbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: DocFlow RDS PostgreSQL
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: 0.0.0.0/0
+          Description: PostgreSQL (lock down to your IP / Lambda SG in production)
+
+  DocFlowDatabase:
+    Type: AWS::RDS::DBInstance
+    DeletionPolicy: Snapshot
+    Properties:
+      DBInstanceIdentifier: !Sub docflow-${AWS::StackName}
+      DBInstanceClass: db.t4g.micro
+      Engine: postgres
+      EngineVersion: "16.4"
+      MasterUsername: docflow
+      MasterUserPassword: !Ref DbMasterPassword
+      DBName: docflow
+      AllocatedStorage: 20
+      StorageType: gp3
+      PubliclyAccessible: !If [IsPublicDb, true, false]
+      VPCSecurityGroups:
+        - !GetAtt DocFlowDbSecurityGroup.GroupId
+      BackupRetentionPeriod: 7
+      StorageEncrypted: true
+
+  DocFlowSyncFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub docflow-sync-${AWS::StackName}
+      Description: Poll Drive folders and append invoice rows to Google Sheets
+      Handler: handler.handler
+      CodeUri: ../
+      Events:
+        SyncSchedule:
+          Type: Schedule
+          Properties:
+            Schedule: rate(5 minutes)
+            Description: Process new PDFs in watched Drive folders
+            Enabled: true
+      Environment:
+        Variables:
+          DATABASE_URL: !Sub
+            - postgresql://docflow:${Password}@${Host}:5432/docflow?sslmode=require
+            - Password: !Ref DbMasterPassword
+              Host: !GetAtt DocFlowDatabase.Endpoint.Address
+          ENCRYPTION_KEY: !Ref EncryptionKey
+          OPENAI_API_KEY: !Ref OpenAIApiKey
+          OPENAI_MODEL: !Ref OpenAIModel
+          DOCFLOW_MONTHLY_DOC_LIMIT: !Ref DocflowMonthlyDocLimit
+          GOOGLE_CLIENT_ID: !Ref GoogleClientId
+          GOOGLE_CLIENT_SECRET: !Ref GoogleClientSecret
+      Policies:
+        - AWSLambdaBasicExecutionRole
+    Metadata:
+      BuildMethod: makefile
+
+Outputs:
+  DatabaseHost:
+    Description: RDS endpoint hostname
+    Value: !GetAtt DocFlowDatabase.Endpoint.Address
+  DatabaseUrl:
+    Description: PostgreSQL connection string for Amplify / local .env
+    Value: !Sub
+      - postgresql://docflow:${Password}@${Host}:5432/docflow?sslmode=require
+      - Password: !Ref DbMasterPassword
+        Host: !GetAtt DocFlowDatabase.Endpoint.Address
+  SyncLambdaArn:
+    Description: Scheduled sync Lambda ARN
+    Value: !GetAtt DocFlowSyncFunction.Arn
+  StackNote:
+    Description: Next steps
+    Value: Deploy Next.js apps on Amplify; set DATABASE_URL from DatabaseUrl output.
